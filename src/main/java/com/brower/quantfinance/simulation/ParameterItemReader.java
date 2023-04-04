@@ -11,7 +11,9 @@ import org.springframework.batch.item.UnexpectedInputException;
 public class ParameterItemReader implements ItemReader {
 
     @Override
-    public Object read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        return null;
+    public SimulationParameters read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+        return new SimulationParametersBuilder()
+                .addParameter("test", new SimulationDoubleParameter(0.0))
+                .build();
     }
 }

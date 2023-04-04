@@ -1,1 +1,5 @@
-com/brower/quantfinance/QuantFinanceApplication$Person.class
+com/brower/quantfinance/data/PolygonLoader.class
+com/brower/quantfinance/data/StockData.class
+com/brower/quantfinance/strategy/KMeansStrategy.class
+com/brower/quantfinance/experiments/ta_test.class
+com/brower/quantfinance/simulation/SimulationParametersBuilder$KMeansStrategy.class

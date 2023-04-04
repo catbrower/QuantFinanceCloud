@@ -1,32 +1,28 @@
 package com.brower.quantfinance.simulation;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 public class SimulationParametersBuilder {
     // TODO add a static seeding function for reproducible results
     private final Random random = new Random();
-    private List<Parameter> parameters;
+    private SimulationParameters simulationParameters;
 
-    public void addParameter(String name) {
-        parameters.add(new Parameter(name, 0.0));
+    public SimulationParametersBuilder addParameter(String name, SimulationParameter param) {
+        simulationParameters.put(name, param);
+        return this;
     }
 
-    public void addParameters(List<String> params) {
-        params.forEach((name) -> {
-            this.parameters.add(new Parameter(name, 0.0));
+    public void translate(Number amount) {
+        simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).add(amount);
         });
     }
 
-    public void translate(double amount) {
-        this.parameters.forEach((param) -> {
-            param.add(amount);
-        });
-    }
-
-    public void scale(double amount) {
-        this.parameters.forEach((param) -> {
-            param.multiply(amount);
+    public void scale(Number amount) {
+        simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).multiply(amount);
         });
     }
 
@@ -35,8 +31,8 @@ public class SimulationParametersBuilder {
     }
 
     public void addLinearNoise(double scale) {
-        this.parameters.forEach((param) -> {
-            param.add(random.nextDouble() * scale);
+        simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).add(random.nextDouble() * scale);
         });
     }
 
@@ -45,8 +41,8 @@ public class SimulationParametersBuilder {
     }
 
     public void addGaussianNoise(double scale) {
-        this.parameters.forEach((param) -> {
-            param.add(random.nextGaussian() * scale);
+        this.simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).add(random.nextGaussian() * scale);
         });
     }
 
@@ -54,14 +50,22 @@ public class SimulationParametersBuilder {
         this.multiplyLinearNoise(1);
     }
     public void multiplyLinearNoise(double scale) {
-        this.parameters.forEach((param) -> {
-            param.multiply(random.nextDouble() * scale);
+        this.simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).multiply(random.nextDouble() * scale);
         });
     }
 
     public void multiplyGaussianNoise(double scale) {
-        this.parameters.forEach((param) -> {
-            param.multiply(random.nextGaussian() * scale);
+        this.simulationParameters.keySet().forEach((paramName) -> {
+            getParameter(paramName).multiply(random.nextGaussian() * scale);
         });
+    }
+
+    private SimulationParameter getParameter(String paramName) {
+        return simulationParameters.get(paramName);
+    }
+
+    public SimulationParameters build() {
+        return simulationParameters;
     }
 }
